@@ -1,7 +1,46 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { RxCross2 } from 'react-icons/rx';
+import { BsFillMicFill } from 'react-icons/bs';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const SearchBox = () => {
-	return <div>SearchBox</div>;
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const searchTerm = searchParams.get('searchTerm');
+	const [term, setTerm] = useState(searchTerm || '');
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		if (!term.trim()) return;
+		router.push(`/search/web?searchTerm=${term}`);
+	};
+
+	return (
+		<form
+			className="flex items-center border borger-gray-200 rounded-full shadow-lg px-6 py-3 ml-10 mr-5 flex-grow max-w-3xl"
+			onSubmit={handleSubmit}
+		>
+			<input
+				type="text"
+				className="w-full focus:outline-none "
+				value={term}
+				onChange={(e) => setTerm(e.target.value)}
+				placeholder="Search Google"
+			/>
+			<RxCross2
+				className="text-2xl text-gray-500 cursor-pointer sm:mr-2"
+				onClick={() => setTerm('')}
+			/>
+			<BsFillMicFill className="hidden sm:inline-flex text-4xl text-blue-500 pl-4 border-l-2 border-grey-300 mr-3" />
+			<AiOutlineSearch
+				className="hidden text-2xl sm:inline-flex text-blue-500 cursor-pointer"
+				onClick={handleSubmit}
+			/>
+		</form>
+	);
 };
 
 export default SearchBox;
